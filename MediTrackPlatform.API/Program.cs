@@ -39,7 +39,8 @@ else if (builder.Environment.IsProduction())
     builder.Services.AddDbContext<AppDbContext>(options =>
     {
         var configuration = new ConfigurationBuilder()
-            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)  // Add main appsettings.json (required)
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)  // Add environment-specific (optional)
             .AddEnvironmentVariables()
             .Build();
         var connectionStringTemplate = configuration.GetConnectionString("DefaultConnection");
