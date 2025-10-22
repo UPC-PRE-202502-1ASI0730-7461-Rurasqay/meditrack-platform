@@ -41,52 +41,42 @@ else if (builder.Environment.IsProduction())
         string? connectionString = null;
         try
         {
-            // Try different connection string sources and names
-            
-            // 1. Try standard DefaultConnection from configuration
+            // Try to get the connection string from Azure App Service connection strings
             connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            Console.WriteLine($"DefaultConnection from configuration: {connectionString?.Substring(0, Math.Min(connectionString?.Length ?? 0, 30))}...");
+            Console.WriteLine($"DefaultConnection from configuration before processing: {connectionString?.Substring(0, Math.Min(connectionString?.Length ?? 0, 50))}...");
             
-            // 2. Try Azure-specific connection string name if DefaultConnection not found
+            // If the connection string is the template pattern, replace it with the actual connection string
+            if (!string.IsNullOrEmpty(connectionString) && connectionString.StartsWith("#{") && connectionString.EndsWith("}#"))
+            {
+                // Extract environment variable name between #{ and }#
+                var envVarName = connectionString.Substring(2, connectionString.Length - 4);
+                Console.WriteLine($"Found placeholder pattern, extracting environment variable: {envVarName}");
+                
+                // Get the actual connection string from environment variables
+                var actualConnectionString = Environment.GetEnvironmentVariable(envVarName);
+                if (!string.IsNullOrEmpty(actualConnectionString))
+                {
+                    connectionString = actualConnectionString;
+                    Console.WriteLine($"Using connection string from environment variable: {envVarName}");
+                }
+                else 
+                {
+                    Console.WriteLine($"Environment variable {envVarName} not found, trying to get connection string directly");
+                    // Try to get the connection string directly using the name from the placeholder
+                    connectionString = builder.Configuration.GetConnectionString(envVarName);
+                    
+                    if (string.IsNullOrEmpty(connectionString))
+                    {
+                        throw new Exception($"Could not find connection string with name '{envVarName}' in Configuration or Environment Variables.");
+                    }
+                }
+            }
+            
+            // If still not found, try with the explicit AZURE_MYSQL_CONNECTIONSTRING name
             if (string.IsNullOrEmpty(connectionString))
             {
                 connectionString = builder.Configuration.GetConnectionString("AZURE_MYSQL_CONNECTIONSTRING");
-                Console.WriteLine($"AZURE_MYSQL_CONNECTIONSTRING from configuration: {connectionString?.Substring(0, Math.Min(connectionString?.Length ?? 0, 30))}...");
-            }
-            
-            // 3. Try direct environment variable
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                connectionString = Environment.GetEnvironmentVariable("AZURE_MYSQL_CONNECTIONSTRING");
-                Console.WriteLine($"AZURE_MYSQL_CONNECTIONSTRING from environment: {connectionString?.Substring(0, Math.Min(connectionString?.Length ?? 0, 30))}...");
-            }
-            
-            // 4. Try template approach from appsettings.json if still not found
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                var configuration = new ConfigurationBuilder()
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                    .AddEnvironmentVariables()
-                    .Build();
-                    
-                var connectionStringTemplate = configuration.GetConnectionString("DefaultConnection");
-                
-                if (string.IsNullOrEmpty(connectionStringTemplate))
-                    throw new Exception("Database connection string template is not set in the configuration.");
-                    
-                if (connectionStringTemplate.StartsWith("#{") && connectionStringTemplate.EndsWith("}#"))
-                {
-                    var envVarName = connectionStringTemplate.Substring(2, connectionStringTemplate.Length - 4);
-                    connectionString = Environment.GetEnvironmentVariable(envVarName);
-                    Console.WriteLine($"Connection string from template (env var {envVarName}): {connectionString?.Substring(0, Math.Min(connectionString?.Length ?? 0, 30))}...");
-                    if (string.IsNullOrEmpty(connectionString))
-                        throw new Exception($"Environment variable '{envVarName}' is not set or is empty.");
-                }
-                else
-                {
-                    connectionString = Environment.ExpandEnvironmentVariables(connectionStringTemplate);
-                }
+                Console.WriteLine($"Using connection string from AZURE_MYSQL_CONNECTIONSTRING configuration: {connectionString?.Substring(0, Math.Min(connectionString?.Length ?? 0, 30))}...");
             }
             
             if (string.IsNullOrEmpty(connectionString))
@@ -114,9 +104,7 @@ else if (builder.Environment.IsProduction())
                 connectionString = connectionString.Trim('"');
             }
 
-            // 2. Handle quoted parameter values correctly - only remove quotes around the entire string, not within key-value pairs
-            
-            // 3. Ensure MySQL parameter names are correct
+            // 2. Fix MySQL parameter names to match expected format
             if (connectionString.Contains("SSL Mode") && !connectionString.Contains("SslMode"))
             {
                 connectionString = connectionString.Replace("SSL Mode", "SslMode");
@@ -125,22 +113,15 @@ else if (builder.Environment.IsProduction())
             {
                 connectionString = connectionString.Replace("User Id", "Uid");
             }
-            if (connectionString.Contains("Password") && !connectionString.Contains("Pwd"))
-            {
-                connectionString = connectionString.Replace("Password", "Pwd");
-            }
             
-            // 4. Normalize the connection string to MySQL format (key=value;key=value)
+            // 3. Normalize the connection string to MySQL format (key=value;key=value)
             // Remove any spaces around = and ; characters
             connectionString = System.Text.RegularExpressions.Regex.Replace(connectionString, @"\s*=\s*", "=");
             connectionString = System.Text.RegularExpressions.Regex.Replace(connectionString, @"\s*;\s*", ";");
             
-            // Remove any extra quotes within the connection string that might interfere
+            // 4. Handle quoted values correctly
             if (connectionString.Contains("'") || connectionString.Contains("\""))
             {
-                // Replace quoted values with temporary placeholders and restore later if needed
-                Console.WriteLine("Found quotes within connection string, normalizing format...");
-                
                 // Split by semicolons to get key-value pairs
                 var pairs = connectionString.Split(';');
                 for (var i = 0; i < pairs.Length; i++)
@@ -182,8 +163,7 @@ else if (builder.Environment.IsProduction())
             {
                 Console.WriteLine($"Connection string length: {connectionString.Length}");
                 Console.WriteLine($"Connection string ASCII values:");
-                for (int i = 0; i < Math.Min(connectionString.Length, 50); i++)
-                {
+                for (int i = 0; i < Math.Min(connectionString.Length, 50); i++) {
                     Console.Write($"[{i}]={connectionString[i]} (ASCII: {(int)connectionString[i]}) ");
                 }
                 Console.WriteLine();
