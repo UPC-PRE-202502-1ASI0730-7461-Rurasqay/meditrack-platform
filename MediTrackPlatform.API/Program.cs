@@ -46,7 +46,22 @@ else if (builder.Environment.IsProduction())
         if (string.IsNullOrEmpty(connectionStringTemplate)) 
             // Stop the application if the connection string template is not set.
             throw new Exception("Database connection string template is not set in the configuration.");
-        var connectionString = Environment.ExpandEnvironmentVariables(connectionStringTemplate);
+            
+        // Process Azure connection string format #{AZURE_MYSQL_CONNECTIONSTRING}#
+        string? connectionString;
+        if (connectionStringTemplate.StartsWith("#{") && connectionStringTemplate.EndsWith("}#"))
+        {
+            // Extract environment variable name between #{ and }#
+            var envVarName = connectionStringTemplate.Substring(2, connectionStringTemplate.Length - 4);
+            connectionString = Environment.GetEnvironmentVariable(envVarName);
+            if (string.IsNullOrEmpty(connectionString))
+                throw new Exception($"Environment variable '{envVarName}' is not set or is empty.");
+        }
+        else
+        {
+            connectionString = Environment.ExpandEnvironmentVariables(connectionStringTemplate);
+        }
+        
         if (string.IsNullOrEmpty(connectionString))
             // Stop the application if the connection string is not set.
             throw new Exception("Database connection string is not set in the configuration.");
