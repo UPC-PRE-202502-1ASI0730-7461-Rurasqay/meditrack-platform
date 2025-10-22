@@ -45,17 +45,20 @@ else if (builder.Environment.IsProduction())
             
             // 1. Try standard DefaultConnection from configuration
             connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            Console.WriteLine($"DefaultConnection from configuration: {connectionString?.Substring(0, Math.Min(connectionString?.Length ?? 0, 30))}...");
             
             // 2. Try Azure-specific connection string name if DefaultConnection not found
             if (string.IsNullOrEmpty(connectionString))
             {
                 connectionString = builder.Configuration.GetConnectionString("AZURE_MYSQL_CONNECTIONSTRING");
+                Console.WriteLine($"AZURE_MYSQL_CONNECTIONSTRING from configuration: {connectionString?.Substring(0, Math.Min(connectionString?.Length ?? 0, 30))}...");
             }
             
             // 3. Try direct environment variable
             if (string.IsNullOrEmpty(connectionString))
             {
                 connectionString = Environment.GetEnvironmentVariable("AZURE_MYSQL_CONNECTIONSTRING");
+                Console.WriteLine($"AZURE_MYSQL_CONNECTIONSTRING from environment: {connectionString?.Substring(0, Math.Min(connectionString?.Length ?? 0, 30))}...");
             }
             
             // 4. Try template approach from appsettings.json if still not found
@@ -76,6 +79,7 @@ else if (builder.Environment.IsProduction())
                 {
                     var envVarName = connectionStringTemplate.Substring(2, connectionStringTemplate.Length - 4);
                     connectionString = Environment.GetEnvironmentVariable(envVarName);
+                    Console.WriteLine($"Connection string from template (env var {envVarName}): {connectionString?.Substring(0, Math.Min(connectionString?.Length ?? 0, 30))}...");
                     if (string.IsNullOrEmpty(connectionString))
                         throw new Exception($"Environment variable '{envVarName}' is not set or is empty.");
                 }
@@ -87,22 +91,83 @@ else if (builder.Environment.IsProduction())
             
             if (string.IsNullOrEmpty(connectionString))
                 throw new Exception("Database connection string is not set in the configuration.");
+
+            // Debug: Print the connection string before cleaning
+            Console.WriteLine("Original connection string format:");
+            for (int i = 0; i < Math.Min(connectionString.Length, 50); i++) {
+                Console.Write($"[{i}]={connectionString[i]} (ASCII: {(int)connectionString[i]}) ");
+            }
+            Console.WriteLine();
             
-            // Validate connection string format - remove quotes if they're present
-            // Azure sometimes adds extra quotes around connection string values
+            // Fix common connection string format issues
+            
+            // 1. Handle quotes and trim whitespace
+            connectionString = connectionString.Trim();
+            
+            // Remove surrounding quotes if present
             if (connectionString.StartsWith("'") && connectionString.EndsWith("'"))
             {
                 connectionString = connectionString.Trim('\'');
             }
+            if (connectionString.StartsWith("\"") && connectionString.EndsWith("\""))
+            {
+                connectionString = connectionString.Trim('"');
+            }
+
+            // 2. Handle quoted parameter values correctly - only remove quotes around the entire string, not within key-value pairs
             
-            // Check for other common format issues in Azure MySQL connection strings
-            connectionString = connectionString.Replace("\"", ""); // Remove any double quotes
-            
-            // Ensure SSL Mode is properly formatted if present
+            // 3. Ensure MySQL parameter names are correct
             if (connectionString.Contains("SSL Mode") && !connectionString.Contains("SslMode"))
             {
                 connectionString = connectionString.Replace("SSL Mode", "SslMode");
             }
+            if (connectionString.Contains("User Id") && !connectionString.Contains("User ID") && !connectionString.Contains("Uid"))
+            {
+                connectionString = connectionString.Replace("User Id", "Uid");
+            }
+            if (connectionString.Contains("Password") && !connectionString.Contains("Pwd"))
+            {
+                connectionString = connectionString.Replace("Password", "Pwd");
+            }
+            
+            // 4. Normalize the connection string to MySQL format (key=value;key=value)
+            // Remove any spaces around = and ; characters
+            connectionString = System.Text.RegularExpressions.Regex.Replace(connectionString, @"\s*=\s*", "=");
+            connectionString = System.Text.RegularExpressions.Regex.Replace(connectionString, @"\s*;\s*", ";");
+            
+            // Remove any extra quotes within the connection string that might interfere
+            if (connectionString.Contains("'") || connectionString.Contains("\""))
+            {
+                // Replace quoted values with temporary placeholders and restore later if needed
+                Console.WriteLine("Found quotes within connection string, normalizing format...");
+                
+                // Split by semicolons to get key-value pairs
+                var pairs = connectionString.Split(';');
+                for (var i = 0; i < pairs.Length; i++)
+                {
+                    if (!string.IsNullOrEmpty(pairs[i]))
+                    {
+                        var parts = pairs[i].Split('=', 2);
+                        if (parts.Length == 2)
+                        {
+                            // Trim quotes from values but not from keys
+                            var key = parts[0];
+                            var value = parts[1].Trim('\'', '"');
+                            pairs[i] = $"{key}={value}";
+                        }
+                    }
+                }
+                connectionString = string.Join(";", pairs);
+            }
+            
+            // Debug: Print the cleaned connection string
+            Console.WriteLine("Normalized connection string format:");
+            for (int i = 0; i < Math.Min(connectionString.Length, 50); i++) {
+                Console.Write($"[{i}]={connectionString[i]} (ASCII: {(int)connectionString[i]}) ");
+            }
+            Console.WriteLine();
+            
+            Console.WriteLine($"Final connection string keys: {string.Join(", ", connectionString.Split(';').Select(p => p.Split('=')[0]))}");
             
             // Use the connection string with MySQL
             options.UseMySQL(connectionString)
@@ -113,8 +178,18 @@ else if (builder.Environment.IsProduction())
         {
             // Provide more details about the connection string format error
             Console.WriteLine($"Connection string format error: {argEx.Message}");
-            Console.WriteLine($"Connection string (partial): {connectionString?.Substring(0, Math.Min(connectionString.Length, 20))}...");
-            throw new Exception($"Invalid connection string format. Please check your Azure MySQL connection string format: {argEx.Message}", argEx);
+            if (connectionString != null)
+            {
+                Console.WriteLine($"Connection string length: {connectionString.Length}");
+                Console.WriteLine($"Connection string ASCII values:");
+                for (int i = 0; i < Math.Min(connectionString.Length, 50); i++)
+                {
+                    Console.Write($"[{i}]={connectionString[i]} (ASCII: {(int)connectionString[i]}) ");
+                }
+                Console.WriteLine();
+            }
+            
+            throw new Exception($"Invalid connection string format: {argEx.Message}", argEx);
         }
     });
 
@@ -147,3 +222,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
