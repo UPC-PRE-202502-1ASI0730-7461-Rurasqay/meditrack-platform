@@ -38,34 +38,43 @@ if (builder.Environment.IsDevelopment())
 else if (builder.Environment.IsProduction())
     builder.Services.AddDbContext<AppDbContext>(options =>
     {
-        var configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)  // Add main appsettings.json (required)
-            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)  // Add environment-specific (optional)
-            .AddEnvironmentVariables()
-            .Build();
-        var connectionStringTemplate = configuration.GetConnectionString("DefaultConnection");
-        if (string.IsNullOrEmpty(connectionStringTemplate)) 
-            // Stop the application if the connection string template is not set.
-            throw new Exception("Database connection string template is not set in the configuration.");
+        // Try to get connection string directly from Azure Connection Strings
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        
+        // If not found directly, try the template approach
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+                
+            var connectionStringTemplate = configuration.GetConnectionString("DefaultConnection");
             
-        // Process Azure connection string format #{AZURE_MYSQL_CONNECTIONSTRING}#
-        string? connectionString;
-        if (connectionStringTemplate.StartsWith("#{") && connectionStringTemplate.EndsWith("}#"))
-        {
-            // Extract environment variable name between #{ and }#
-            var envVarName = connectionStringTemplate.Substring(2, connectionStringTemplate.Length - 4);
-            connectionString = Environment.GetEnvironmentVariable(envVarName);
-            if (string.IsNullOrEmpty(connectionString))
-                throw new Exception($"Environment variable '{envVarName}' is not set or is empty.");
-        }
-        else
-        {
-            connectionString = Environment.ExpandEnvironmentVariables(connectionStringTemplate);
+            if (string.IsNullOrEmpty(connectionStringTemplate))
+                // Stop the application if the connection string template is not set.
+                throw new Exception("Database connection string template is not set in the configuration.");
+                
+            // Process Azure connection string format #{AZURE_MYSQL_CONNECTIONSTRING}#
+            if (connectionStringTemplate.StartsWith("#{") && connectionStringTemplate.EndsWith("}#"))
+            {
+                // Extract environment variable name between #{ and }#
+                var envVarName = connectionStringTemplate.Substring(2, connectionStringTemplate.Length - 4);
+                connectionString = Environment.GetEnvironmentVariable(envVarName);
+                if (string.IsNullOrEmpty(connectionString))
+                    throw new Exception($"Environment variable '{envVarName}' is not set or is empty.");
+            }
+            else
+            {
+                connectionString = Environment.ExpandEnvironmentVariables(connectionStringTemplate);
+            }
         }
         
         if (string.IsNullOrEmpty(connectionString))
             // Stop the application if the connection string is not set.
             throw new Exception("Database connection string is not set in the configuration.");
+            
         options.UseMySQL(connectionString)
             .LogTo(Console.WriteLine, LogLevel.Error)
             .EnableDetailedErrors();
