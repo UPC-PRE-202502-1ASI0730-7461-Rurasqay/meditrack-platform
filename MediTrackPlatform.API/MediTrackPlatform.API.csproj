@@ -27,4 +27,11 @@
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Devices\Applications\" />
+      <Folder Include="Devices\Domain\" />
+      <Folder Include="Devices\Infrastructure\" />
+      <Folder Include="Devices\Interfaces\" />
+    </ItemGroup>
+
 </Project>
