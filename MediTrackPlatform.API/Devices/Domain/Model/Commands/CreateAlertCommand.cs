@@ -1,3 +1,10 @@
-namespace MediTrackPlatform.API.Devices.Domain.Model.Queries;
+namespace MediTrackPlatform.API.Devices.Domain.Model.Commands;
 
-public record CreateAlertCommand();
+using MediTrackPlatform.API.Devices.Domain.Model.ValueObjects;
+public record CreateAlertCommand(
+    string DeviceId,
+    EAlertType Type,
+    string Message,
+    string DataRegistered,
+    DateTime RegisteredAt
+    );
