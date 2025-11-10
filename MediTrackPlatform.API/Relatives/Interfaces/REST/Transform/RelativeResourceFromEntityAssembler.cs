@@ -19,10 +19,12 @@ public class RelativeResourceFromEntityAssembler
             entity.SeniorCitizen.ProfileImage,
             entity.SeniorCitizen.DeviceId
         );
+        
+        string plan = entity.Plan.ToString();
 
         return new RelativeResource(
             entity.Id,
-            entity.Plan,
+            plan,
             entity.FirstName,
             entity.LastName,
             entity.PhoneNumber,
