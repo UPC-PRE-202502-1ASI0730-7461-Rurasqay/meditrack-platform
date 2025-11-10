@@ -34,7 +34,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Devices\Applications\" />
       <Folder Include="Devices\Application\EventHandlers\" />
       <Folder Include="Devices\Interfaces\REST\Resources\" />
       <Folder Include="Devices\Interfaces\REST\Transform\" />
