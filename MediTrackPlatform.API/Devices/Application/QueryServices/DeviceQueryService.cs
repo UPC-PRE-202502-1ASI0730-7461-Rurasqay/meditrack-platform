@@ -14,6 +14,6 @@ public class DeviceQueryService(IDeviceRepository deviceRepository) : IDeviceQue
 
     public async Task<IEnumerable<Device>> Handle(GetAllDevicesQuery query)
     {
-        return await deviceRepository.ListByHolderIdAsync(query.HolderId);
+        return await deviceRepository.ListAsync();
     }
 }

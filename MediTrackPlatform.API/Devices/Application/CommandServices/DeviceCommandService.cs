@@ -11,20 +11,9 @@ public class DeviceCommandService(IDeviceRepository deviceRepository, IUnitOfWor
 {
     public async Task<Device?> Handle(CreateDeviceCommand command)
     {
-        var device = new Device(command.Model, command.HolderId.ToString());
-        
-        try
-        {
-            await deviceRepository.AddAsync(device);
-            
-            await unitOfWork.CompleteAsync();
-            
-            return device;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"An error occurred while creating the device: {e.Message}");
-            return null;
-        }
+        var device = new Device(command);
+        await deviceRepository.AddAsync(device);
+        await unitOfWork.CompleteAsync();
+        return device;
     }
 }

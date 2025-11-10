@@ -14,6 +14,6 @@ public class AlertQueryService(IAlertRepository alertRepository) : IAlertQuerySe
 
     public async Task<IEnumerable<Alert>> Handle(GetAllAlertsQuery query)
     {
-        return await alertRepository.ListBySeniorCitizenIdAsync(query.SeniorCitizenId);
+        return await alertRepository.ListAsync();
     }
 }
