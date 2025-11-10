@@ -1,15 +1,9 @@
 using MediTrackPlatform.API.Devices.Domain.Model.Aggregates;
+using MediTrackPlatform.API.Shared.Domain.Repositories;
 
 namespace MediTrackPlatform.API.Devices.Domain.Repositories;
 
-public interface IDeviceRepository
+public interface IDeviceRepository : IBaseRepository<Device>
 {
-    Task AddAsync(Device device);
-
-    Task<Device?> FindByIdAsync(int deviceId);
-    
-    Task<IEnumerable<Device>> ListByHolderIdAsync(int holderId);
-    
-    void Update(Device device);
     
 }
