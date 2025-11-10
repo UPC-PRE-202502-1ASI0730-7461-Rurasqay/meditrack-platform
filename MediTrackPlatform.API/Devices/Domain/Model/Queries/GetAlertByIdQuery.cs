@@ -1,6 +1,3 @@
 namespace MediTrackPlatform.API.Devices.Domain.Model.Queries;
 
-public class GetAlertByIdQuery
-{
-    
-}
+public record GetAlertByIdQuery(int AlertId);
