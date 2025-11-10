@@ -1,8 +1,8 @@
 namespace MediTrackPlatform.API.Devices.Domain.Model.Commands;
 
 public record CreateDeviceCommand(
-    string DeviceId,
+    int DeviceId,
     string Model,
-    string HolderId,
+    int HolderId,
     string HolderType
     );
