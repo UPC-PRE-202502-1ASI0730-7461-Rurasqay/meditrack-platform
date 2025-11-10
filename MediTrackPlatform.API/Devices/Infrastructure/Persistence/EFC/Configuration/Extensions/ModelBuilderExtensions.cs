@@ -1,3 +1,5 @@
+using MediTrackPlatform.API.Devices.Domain.Model.Aggregates;
+using MediTrackPlatform.API.Devices.Domain.Model.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediTrackPlatform.API.Devices.Infrastructure.Persistence.EFC.Configuration.Extensions;
@@ -6,33 +8,19 @@ public static class ModelBuilderExtensions
 {
     public static void ApplyDevicesConfiguration(this ModelBuilder builder)
     {
-        // Publishing Context
-        builder.Entity<Category>().HasKey(c => c.Id);
-        builder.Entity<Category>().Property(c => c.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<Category>().Property(c => c.Name).IsRequired().HasMaxLength(30);
+        builder.Entity<Alert>().HasKey(t => t.AlertId);
+        builder.Entity<Alert>().Property(t => t.AlertId).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Alert>().Property(t => t.DeviceId).IsRequired();
+        builder.Entity<Alert>().Property(t => t.EAlertType).IsRequired();
+        builder.Entity<Alert>().Property(t => t.Message).IsRequired().HasMaxLength(500);
+        builder.Entity<Alert>().Property(t => t.DataRegistered).IsRequired();
+        builder.Entity<Alert>().Property(t => t.RegisteredAt).IsRequired();
     
-        builder.Entity<Tutorial>().HasKey(t => t.Id);
-        builder.Entity<Tutorial>().Property(t => t.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<Tutorial>().Property(t => t.Title).IsRequired().HasMaxLength(50);
-        builder.Entity<Tutorial>().Property(t => t.Summary).IsRequired().HasMaxLength(240);
-    
-        builder.Entity<Asset>().HasDiscriminator(a => a.Type);
-        builder.Entity<Asset>().HasKey(a => a.Id);
-        builder.Entity<Asset>().HasDiscriminator<string>("asset_type")
-            .HasValue<Asset>("asset_base")
-            .HasValue<ImageAsset>("asset_image")
-            .HasValue<VideoAsset>("asset_video")
-            .HasValue<ReadableContentAsset>("asset_readable_content");
-    
-        builder.Entity<Asset>().OwnsOne(i => i.AssetIdentifier, ai =>
-        {
-            ai.WithOwner().HasForeignKey("Id");
-            ai.Property(p => p.Identifier).HasColumnName("AssetIdentifier");
-        });
-        builder.Entity<ImageAsset>().Property(p => p.ImageUri).IsRequired();
-        builder.Entity<VideoAsset>().Property(p => p.VideoUri).IsRequired();
-    
-        builder.Entity<Tutorial>().HasMany(t => t.Assets);
+        builder.Entity<Device>().HasKey(t => t.DeviceId);
+        builder.Entity<Device>().Property(t => t.DeviceId).IsRequired();
+        builder.Entity<Device>().Property(t => t.Model).IsRequired();
+        builder.Entity<Device>().Property(t => t.Status).IsRequired();
+        builder.Entity<Device>().OwnsOne<Holder>(t => t.Holder);
     
     }
 }
