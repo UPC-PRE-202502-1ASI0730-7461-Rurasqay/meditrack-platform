@@ -1,7 +1,7 @@
-using ACME.LearningCenterPlatform.API.Shared.Domain.Model.Events;
+using MediTrackPlatform.API.Shared.Domain.Model.Events;
 using Cortex.Mediator.Notifications;
 
-namespace ACME.LearningCenterPlatform.API.Shared.Application.Internal.EventHandlers;
+namespace MediTrackPlatform.API.Shared.Application.Internal.EventHandlers;
 
 /// <summary>
 /// Represents a handler for a specific type of event.

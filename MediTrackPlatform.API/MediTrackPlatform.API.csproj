@@ -35,6 +35,7 @@
 
     <ItemGroup>
       <Folder Include="Devices\Application\EventHandlers\" />
+      <Folder Include="Devices\Domain\Model\Entities\" />
       <Folder Include="Devices\Interfaces\REST\Resources\" />
       <Folder Include="Devices\Interfaces\REST\Transform\" />
     </ItemGroup>
