@@ -21,8 +21,13 @@ public class BloodPressureMeasurement : Measurement
     
     public BloodPressureThreshold Threshold { get; set; }
     
-    public bool SurpassesThreshold()
+    public bool DiastolicSurpassesThreshold()
     {
-        return Threshold.IsViolatedBy(Diastolic) || Threshold.IsViolatedBy(Systolic);
+        return Threshold.IsViolatedBy(Diastolic);
+    }
+    
+    public bool SystolicSurpassesThreshold()
+    {
+        return Threshold.IsViolatedBy(Systolic);
     }
 }

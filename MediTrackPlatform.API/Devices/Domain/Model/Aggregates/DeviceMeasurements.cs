@@ -15,28 +15,64 @@ public partial class Device
     
     public void AddHeartRate(int bpm)
     {
-        Measurements.Add(new HeartRateMeasurement(bpm));
+        var measurement = new HeartRateMeasurement(bpm);
+        Measurements.Add(measurement);
     }
     
-    public void AddTemperature(int celcius)
+    public void AddTemperature(double celsius)
     {
-        Measurements.Add(new TemperatureMeasurement(celcius));
+        var measurement = new TemperatureMeasurement(celsius);
+        Measurements.Add(measurement);
     }
     
     public void AddOxygen(int spo2)
     {
-        Measurements.Add(new OxygenMeasurement(spo2));
+        var measurement = new OxygenMeasurement(spo2);
+        Measurements.Add(measurement);
     }
     
     public void AddBloodPressure(int diastolic, int systolic)
     {
-        Measurements.Add(new BloodPressureMeasurement(diastolic, systolic));
+        var measurement = new BloodPressureMeasurement(diastolic, systolic);
+        Measurements.Add(measurement);
     }
     
-    public void RemoveAsset(int measurementId)
+    public ICollection<Measurement> GetMeasurementsOfType<T>() where T : Measurement
     {
-        var measurement = Measurements.FirstOrDefault(m => m.MeasurementId == measurementId);
-        if (measurement is null) return;
-        Measurements.Remove(measurement);
+        return Measurements.Where(m => m is T).ToList();
+    }
+    
+    public ICollection<Measurement> GetHeartRateMeasurements()
+    {
+        return GetMeasurementsOfType<HeartRateMeasurement>();
+    }
+    
+    public ICollection<Measurement> GetTemperatureMeasurements()
+    {
+        return GetMeasurementsOfType<TemperatureMeasurement>();
+    }
+    
+    public ICollection<Measurement> GetOxygenMeasurements()
+    {
+        return GetMeasurementsOfType<OxygenMeasurement>();
+    }
+    
+    public ICollection<Measurement> GetBloodPressureMeasurements()
+    {
+        return GetMeasurementsOfType<BloodPressureMeasurement>();
+    }
+    
+    public bool ExistsMoreThanWeeklyMeasurementsOfType<T>() where T : Measurement
+    {
+        return Measurements.Count(m => m is T) > 7;
+    }
+    
+    public void RemoveLastMeasurementOfType<T>() where T : Measurement
+    {
+        var lastMeasurement = Measurements.LastOrDefault(m => m is T);
+        if (lastMeasurement != null)
+        {
+            Measurements.Remove(lastMeasurement);
+        }
     }
 }

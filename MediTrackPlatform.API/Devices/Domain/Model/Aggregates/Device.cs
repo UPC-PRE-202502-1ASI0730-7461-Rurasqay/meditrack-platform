@@ -12,9 +12,9 @@ public partial class Device
 
     public Device(string model, int holderId) : this()
     {
-        this.Model = model;
-        this.Status = EDeviceStatus.Active;
-        this.Holder = new Holder(holderId, "SeniorCitizen");
+        Model = model;
+        Status = EDeviceStatus.Active;
+        Holder = new Holder(holderId, "SeniorCitizen");
     }
 
     public Device(CreateDeviceCommand command) : this(command.Model, command.HolderId)

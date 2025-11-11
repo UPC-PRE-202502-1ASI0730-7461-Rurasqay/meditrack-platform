@@ -9,13 +9,13 @@ public class TemperatureMeasurement: Measurement
         Threshold = new TemperatureThreshold(35, 38);
     }
 
-    public TemperatureMeasurement(int celcius) : base(EMeasurementType.Temperature)
+    public TemperatureMeasurement(double celcius) : base(EMeasurementType.Temperature)
     {
         Celcius = celcius;
-        Threshold = new TemperatureThreshold(35, 38);
+        Threshold = new TemperatureThreshold(35.0, 38.0);
     }
     
-    public int Celcius { get; set; }
+    public double Celcius { get; set; }
     public TemperatureThreshold Threshold { get; set; }
     
     public bool SurpassesThreshold()
