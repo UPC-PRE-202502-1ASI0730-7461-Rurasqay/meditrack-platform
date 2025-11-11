@@ -1,3 +1,3 @@
 namespace MediTrackPlatform.API.Devices.Domain.Model.Queries;
 
-public record GetAllAlertsQuery();
+public record GetAllAlertsQuery(int SeniorCitizenId);
