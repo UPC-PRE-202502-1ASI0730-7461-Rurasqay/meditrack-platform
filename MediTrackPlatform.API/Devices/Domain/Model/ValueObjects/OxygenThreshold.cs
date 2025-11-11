@@ -3,16 +3,11 @@ namespace MediTrackPlatform.API.Devices.Domain.Model.ValueObjects;
 public record OxygenThreshold
 {
     public int Min { get; }
-    public int Max { get; }
 
     // Constructor para EF Core y creación
-    public OxygenThreshold(int min, int max)
+    public OxygenThreshold(int min)
     {
-        if (min >= max)
-            throw new ArgumentException("El umbral mínimo no puede ser mayor o igual al máximo.");
-        
         Min = min;
-        Max = max;
     }
 
     /// <summary>
@@ -21,6 +16,6 @@ public record OxygenThreshold
     /// </summary>
     public bool IsViolatedBy(int value)
     {
-        return value < Min || value > Max;
+        return value < Min;
     }
 }
