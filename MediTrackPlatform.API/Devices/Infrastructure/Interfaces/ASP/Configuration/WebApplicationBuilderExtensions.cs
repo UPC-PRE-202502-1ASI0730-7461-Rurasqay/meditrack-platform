@@ -8,9 +8,8 @@ namespace MediTrackPlatform.API.Devices.Infrastructure.Interfaces.ASP.Configurat
 
 public static class WebApplicationBuilderExtensions
 {
-    public static void AddPublishingContextServices(this WebApplicationBuilder builder)
+    public static void AddDevicesContextServices(this WebApplicationBuilder builder)
     {
-        // Publishing Bounded Context
         builder.Services.AddScoped<IAlertRepository, AlertRepository>();
         builder.Services.AddScoped<IDeviceRepository, DeviceRepository>();
         builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();

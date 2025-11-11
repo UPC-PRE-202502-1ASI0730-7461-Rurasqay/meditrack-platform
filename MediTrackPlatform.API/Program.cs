@@ -1,5 +1,8 @@
+using MediTrackPlatform.API.Devices.Infrastructure.Interfaces.ASP.Configuration;
 using MediTrackPlatform.API.Shared.Domain.Repositories;
 using MediTrackPlatform.API.Shared.Infrastructure.Interfaces.ASP.Configuration;
+using MediTrackPlatform.API.Shared.Infrastructure.Interfaces.ASP.Configuration.Extensions;
+using MediTrackPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration.Extensions;
 using MediTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
 using MediTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -173,10 +176,14 @@ else if (builder.Environment.IsProduction())
         }
     });
 
-// Configure Dependency Injection
+// Add Open API Configuration
 
-// Shared Bounded Context Injection Configuration
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+// Add context-specific services
+builder.AddSharedContextServices();
+builder.AddDevicesContextServices();
+
+// Mediator Configuration
+builder.AddCortexConfigurationServices();
 
 var app = builder.Build();
 
