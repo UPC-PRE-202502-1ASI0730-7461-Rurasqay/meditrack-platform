@@ -4,7 +4,7 @@ using MediTrackPlatform.API.Devices.Interfaces.REST.Resources;
 
 namespace MediTrackPlatform.API.Devices.Interfaces.REST.Transform;
 
-public static class DeviceResourceFromEntityResource
+public static class DeviceResourceFromEntityAssembler
 {
     public static DeviceResource ToResourceFromEntity(Device entity)
     {
