@@ -12,6 +12,12 @@ public partial class Alert
     public double DataRegistered { get; set; }
     public DateTime RegisteredAt { get; set; }
 
+    // Constructor sin parámetros para EF Core
+    public Alert()
+    {
+        Message = string.Empty;
+    }
+
     public Alert(int deviceId, double dataRegistered, string measurementType)
     {
         this.DeviceId = deviceId;
