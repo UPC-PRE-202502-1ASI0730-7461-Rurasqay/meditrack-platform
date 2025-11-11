@@ -1,70 +1,48 @@
+using System.Net.Mime;
 using MediTrackPlatform.API.Devices.Domain.Model.Queries; 
 using MediTrackPlatform.API.Devices.Domain.Services;     
 using MediTrackPlatform.API.Devices.Interfaces.REST.Resources;
+using MediTrackPlatform.API.Devices.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
+namespace MediTrackPlatform.API.Devices.Interfaces.REST;
 
-namespace MediTrackPlatform.API.Devices.Interfaces.REST
+[ApiController]
+[Route("api/v1/[controller]")]
+[Produces(MediaTypeNames.Application.Json)]
+[SwaggerTag("Available Alerts endpoints")]
+public class AlertsController(IAlertQueryService alertQueryService): ControllerBase
 {
-    [ApiController]
-    [Route("api/v1/[controller]")]
-    public class AlertsController : ControllerBase
+    [HttpGet("{alertId:int}")]
+    [SwaggerOperation(
+        Summary = "Get a alert by ID",
+        Description = "Get a alert by ID",
+        OperationId = "GetAlertById")]
+    [SwaggerResponse(StatusCodes.Status200OK, "The alert was found", typeof(AlertResource))]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "The alert was not found")]
+    public async Task<IActionResult> GetAlertById(int alertId)
     {
-        private readonly IAlertQueryService _alertQueryService;
+        var query = new GetAlertByIdQuery(alertId);
+        var alert = await alertQueryService.Handle(query);
 
-        public AlertsController(IAlertQueryService alertQueryService)
-        {
-            _alertQueryService = alertQueryService;
-        }
+        if (alert is null) return NotFound();
 
-        [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<AlertResource>), 200)]
-        [ProducesResponseType(500)]
-        public async Task<IActionResult> GetAllAlerts([FromQuery] int seniorCitizenId)
-        {
-            var query = new GetAllAlertsQuery(seniorCitizenId);
-            
-            var alerts = await _alertQueryService.Handle(query);
-            
-            var resources = alerts.Select(alert => 
-                new AlertResource(
-                    alert.AlertId,
-                    alert.DeviceId,
-                    alert.EAlertType.ToString(),
-                    alert.Message,
-                    alert.DataRegistered,
-                    alert.RegisteredAt
-                ));
-            
-            return Ok(resources);
-        }
+        var resource = AlertResourceFromEntityAssembler.ToResourceFromEntity(alert);
+        return Ok(resource);
+    }
 
-
-        [HttpGet("{alertId}")]
-        [ProducesResponseType(typeof(AlertResource), 200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
-        public async Task<IActionResult> GetAlertById(int alertId)
-        {
-            var query = new GetAlertByIdQuery(alertId);
-            
-            var alert = await _alertQueryService.Handle(query);
-
-            if (alert == null)
-            {
-                return NotFound();
-            }
-
-            var resource = new AlertResource(
-                alert.AlertId,
-                alert.DeviceId,
-                alert.EAlertType.ToString(),
-                alert.Message,
-                alert.DataRegistered,
-                alert.RegisteredAt
-            );
-
-            return Ok(resource);
-        }
+    [HttpGet]
+    [SwaggerOperation(
+        Summary = "Get all alerts",
+        Description = "Get all alerts",
+        OperationId = "GetAllAlerts")]
+    [SwaggerResponse(StatusCodes.Status200OK, "The alerts were found", typeof(IEnumerable<AlertResource>))]
+    public async Task<IActionResult> GetAllAlerts()
+    {
+        var getAllAlertsQuery = new GetAllAlertsQuery();
+        var alerts = await alertQueryService.Handle(getAllAlertsQuery);
+        var alertResources = alerts.Select(AlertResourceFromEntityAssembler.ToResourceFromEntity);
+        return Ok(alertResources);
     }
 }

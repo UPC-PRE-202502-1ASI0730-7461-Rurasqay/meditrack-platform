@@ -3,7 +3,7 @@ using MediTrackPlatform.API.Devices.Interfaces.REST.Resources;
 
 namespace MediTrackPlatform.API.Devices.Interfaces.REST.Transform;
 
-public static class AlertResourceFromEntityResource
+public static class AlertResourceFromEntityAssembler
 {
     public static AlertResource ToResourceFromEntity(Alert entity)
     {
