@@ -8,7 +8,7 @@ public partial class Device
     public int DeviceId { get; set; }
     public string Model { get; set; }
     public EDeviceStatus  Status { get; set; }
-    public Holder? Holder { get; set; }
+    public Holder Holder { get; set; }
 
     public Device(string model, int holderId) : this()
     {

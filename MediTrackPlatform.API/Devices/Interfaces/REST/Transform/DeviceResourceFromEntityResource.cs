@@ -11,8 +11,9 @@ public static class DeviceResourceFromEntityResource
         return new DeviceResource(
             entity.DeviceId,
             entity.Model,
-            entity.Status,
-            entity.Holder
+            entity.Status.ToString(),
+            entity.Holder.HolderId,
+            entity.Holder.HolderType
         );
     }
 }

@@ -8,9 +8,9 @@ public static class AlertResourceFromEntityResource
     public static AlertResource ToResourceFromEntity(Alert entity)
     {
         return new AlertResource(
-            entity.AlertId.ToString(),
-            entity.DeviceId.ToString(),
-            entity.EAlertType,
+            entity.AlertId,
+            entity.DeviceId,
+            entity.EAlertType.ToString(),
             entity.Message,
             entity.DataRegistered,
             entity.RegisteredAt
