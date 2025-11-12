@@ -1,5 +1,6 @@
 using MediTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using EntityFrameworkCore.CreatedUpdatedDate.Extensions;
+using MediTrackPlatform.API.Organization.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
@@ -16,6 +17,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        builder.ApplyOrganizationsConfiguration();
         builder.UseSnakeCaseNamingConvention();
     }
 }
