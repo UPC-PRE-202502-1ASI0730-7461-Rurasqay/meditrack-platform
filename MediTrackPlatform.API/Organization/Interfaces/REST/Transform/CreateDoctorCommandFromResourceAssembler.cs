@@ -1,21 +1,22 @@
 using MediTrackPlatform.API.Organization.Domain.Model.Commands;
+using MediTrackPlatform.API.Organization.Interfaces.REST.Resources;
 
 namespace MediTrackPlatform.API.Organization.Interfaces.REST.Transform;
 
 public static class CreateDoctorCommandFromResourceAssembler
 {
-    public static CreateDoctorCommand ToCommandFromResource(CreateDoctorCommand command)
+    public static CreateDoctorCommand ToCommandFromResource(CreateDoctorResource resource)
     {
         return new CreateDoctorCommand(
-            command.UserId,
-            command.OrganizationId,
-            command.FirstName,
-            command.LastName,
-            command.Age,
-            command.Email,
-            command.PhoneNumber,
-            command.Specialty,
-            command.ImageUrl
+            resource.UserId,
+            resource.OrganizationId,
+            resource.FirstName,
+            resource.LastName,
+            resource.Age,
+            resource.Email,
+            resource.PhoneNumber,
+            resource.Specialty,
+            resource.ImageUrl
             );
     }
 }
