@@ -20,15 +20,13 @@ public partial class Organization
         Type = command.Type;
     }
 
-    public bool IsClinic()
-    {
-        return string.Equals("clinic", Type);
-    }
+    public bool IsClinic() => string.Equals(Type, "Clinic");
+    public bool IsResidence() => string.Equals(Type, "Residence");
 
-    public bool IsResidence()
+    public Organization UpdateInformation(UpdateOrganizationCommand command)
     {
-        return string.Equals("residence", Type);
+        Name = command.Name;
+        Type = command.Type;
+        return this;
     }
-    
-    // TODO: Add events
 }

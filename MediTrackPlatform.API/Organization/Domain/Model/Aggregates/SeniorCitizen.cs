@@ -40,13 +40,10 @@ public partial class SeniorCitizen
     {
         OrganizationId = command.OrganizationId;
         DeviceId = command.DeviceId;
-        AssignedDoctorId = command.AssignedDoctorId;
-        AssignedCaregiverId = command.AssignedCaregiverId;
         FirstName = command.FirstName;
         LastName = command.LastName;
         Dni = command.Dni;
-        BirthDate = DateTime.Parse(command.BirthDate);
-        Age = command.Age;
+        BirthDate = command.BirthDate;
         Gender = command.Gender;
         Weight = command.Weight;
         Height = command.Height;
@@ -69,8 +66,7 @@ public partial class SeniorCitizen
         FirstName = command.FirstName;
         LastName = command.LastName;
         Dni = command.Dni;
-        BirthDate = DateTime.Parse(command.BirthDate);
-        Age = command.Age;
+        BirthDate = command.BirthDate;
         Gender = command.Gender;
         Weight = command.Weight;
         Height = command.Height;

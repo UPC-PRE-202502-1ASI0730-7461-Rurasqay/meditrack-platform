@@ -11,7 +11,7 @@ public partial class Doctor
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
     public int Age { get; private set; }
-    public Email Email { get; private set; }
+    public string Email { get; private set; }
     public string PhoneNumber { get; private set; }
     public string Specialty { get; private set; }
     public string ImageUrl { get; private set; }
@@ -23,7 +23,7 @@ public partial class Doctor
         FirstName = string.Empty;
         LastName = string.Empty;
         Age = -1;
-        Email = new Email();
+        Email = string.Empty;
         PhoneNumber = string.Empty;
         Specialty = string.Empty;
         ImageUrl = string.Empty;
@@ -36,7 +36,7 @@ public partial class Doctor
         FirstName = command.FirstName;
         LastName = command.LastName;
         Age = command.Age;
-        Email = new Email(command.Email);
+        Email = command.Email;
         PhoneNumber = command.PhoneNumber;
         Specialty = command.Specialty;
         ImageUrl = command.ImageUrl;
@@ -51,7 +51,7 @@ public partial class Doctor
         FirstName = command.FirstName;
         LastName = command.LastName;
         Age = command.Age;
-        Email = new Email(command.Email);
+        Email = command.Email;
         PhoneNumber = command.PhoneNumber;
         return this;
     }

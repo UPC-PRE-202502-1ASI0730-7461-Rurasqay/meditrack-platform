@@ -14,7 +14,7 @@ public static class DoctorResourceFromEntityAssembler
             entity.FirstName,
             entity.LastName,
             entity.Age,
-            entity.Email.Address,
+            entity.Email,
             entity.PhoneNumber,
             entity.Specialty,
             entity.ImageUrl,

@@ -6,5 +6,5 @@ public interface IOrganizationCommandService
 {
     Task<int?> Handle(CreateOrganizationCommand command);
     Task<Model.Aggregates.Organization?> Handle(UpdateOrganizationCommand command);
-    Task<Model.Aggregates.Organization?> Handle(DeleteOrganizationCommand command);
+    Task Handle(DeleteOrganizationCommand command);
 }

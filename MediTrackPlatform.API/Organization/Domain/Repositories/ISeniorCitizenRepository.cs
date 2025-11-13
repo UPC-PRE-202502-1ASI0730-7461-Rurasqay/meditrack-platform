@@ -5,5 +5,5 @@ namespace MediTrackPlatform.API.Organization.Domain.Repositories;
 
 public interface ISeniorCitizenRepository : IBaseRepository<SeniorCitizen>
 {
-    
+    Task<IEnumerable<SeniorCitizen>> ListByOrganizationIdAsync(int organizationId);
 }

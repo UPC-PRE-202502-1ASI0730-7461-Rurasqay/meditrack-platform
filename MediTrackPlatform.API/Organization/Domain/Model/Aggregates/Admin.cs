@@ -25,4 +25,20 @@ public partial class Admin
         FirstName = command.FirstName;
         LastName = command.LastName;
     }
+    
+    public string GetFullName() => $"{FirstName} {LastName}";
+    public bool BelongsToOrganization(int organizationId) => organizationId == OrganizationId;
+
+    public Admin UpdatePersonalInformation(UpdateAdminCommand command)
+    {
+        FirstName = command.FirstName;
+        LastName = command.LastName;
+        return this;
+    }
+
+    public Admin AssignUserId(int userId)
+    {
+        UserId = userId;
+        return this;
+    }
 }
