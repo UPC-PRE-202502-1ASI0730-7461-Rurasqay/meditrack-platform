@@ -67,20 +67,20 @@ public class SeniorCitizensController(
         return Ok(seniorCitizenResources);
     }
 
-    [HttpGet("/organization/{organizationId:int}")]
+    [HttpGet("organization/{organizationId:int}")]
     [SwaggerOperation(
         Summary = "Get All Senior Citizen By Organization Id",
         Description = "Get All Senior Citizen By Organization Id",
         OperationId = "GetAllSeniorCitizenByOrganizationId")]
     [SwaggerResponse(StatusCodes.Status200OK, "Senior Citizen retrieved successfully", typeof(IEnumerable<SeniorCitizenResource>))]
-    public async Task<IActionResult> GetAllAdminsByOrganizationId(int organizationId)
+    public async Task<IActionResult> GetAllSeniorCitizensByOrganizationId(int organizationId)
     {
         var seniorCitizens = await seniorCitizenQueryService.Handle(new GetAllSeniorCitizensByOrganizationIdQuery(organizationId));
         var seniorCitizensResources = seniorCitizens.Select(SeniorCitizenResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(seniorCitizensResources);
     }
     
-    [HttpPut("/{seniorCitizenId:int}")]
+    [HttpPut("{seniorCitizenId:int}")]
     [SwaggerOperation(
         Summary = "Update A Senior Citizen",
         Description = "Update A Senior Citizen",
@@ -97,7 +97,7 @@ public class SeniorCitizensController(
         return Ok(seniorCitizenResource);
     }
 
-    [HttpDelete("/{seniorCitizenId:int}")]
+    [HttpDelete("{seniorCitizenId:int}")]
     [SwaggerOperation(
         Summary = "Delete A Senior Citizen",
         Description = "Delete A Senior Citizen",
@@ -112,7 +112,7 @@ public class SeniorCitizensController(
             await seniorCitizenCommandService.Handle(deleteSeniorCitizenCommand);
             return NoContent();
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return NotFound();
         }

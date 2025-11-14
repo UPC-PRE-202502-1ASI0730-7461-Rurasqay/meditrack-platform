@@ -1,6 +1,5 @@
 using System.Net.Mime;
 using MediTrackPlatform.API.Organization.Domain.Model.Commands;
-using MediTrackPlatform.API.Organization.Domain.Model.Events;
 using MediTrackPlatform.API.Organization.Domain.Model.Queries;
 using MediTrackPlatform.API.Organization.Domain.Services;
 using MediTrackPlatform.API.Organization.Interfaces.REST.Resources;
@@ -68,7 +67,7 @@ public class AdminsController(
         return Ok(adminResources);
     }
 
-    [HttpGet("/organization/{organizationId:int}")]
+    [HttpGet("organization/{organizationId:int}")]
     [SwaggerOperation(
         Summary = "Get All Admins By Organization Id",
         Description = "Get All Admins By Organization Id",
@@ -81,7 +80,7 @@ public class AdminsController(
         return Ok(adminsResources);
     }
 
-    [HttpGet("/user/{userId:int}/organization/{organizationId:int}")]
+    [HttpGet("user/{userId:int}/organization/{organizationId:int}")]
     [SwaggerOperation(
         Summary = "Get Admin By User Id And Organization Id",
         Description = "Get Admin By User Id And Organization Id",
@@ -97,7 +96,7 @@ public class AdminsController(
         return Ok(resource);
     }
 
-    [HttpPut("/{adminId:int}")]
+    [HttpPut("{adminId:int}")]
     [SwaggerOperation(
         Summary = "Update An Admin",
         Description = "Update An Admin",
@@ -114,7 +113,7 @@ public class AdminsController(
         return Ok(adminResource);
     }
 
-    [HttpDelete("/{adminId:int}")]
+    [HttpDelete("{adminId:int}")]
     [SwaggerOperation(
         Summary = "Delete An Admin",
         Description = "Delete An Admin",
@@ -129,7 +128,7 @@ public class AdminsController(
             await adminCommandService.Handle(deleteAdminCommand);
             return NoContent();
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return NotFound();
         }

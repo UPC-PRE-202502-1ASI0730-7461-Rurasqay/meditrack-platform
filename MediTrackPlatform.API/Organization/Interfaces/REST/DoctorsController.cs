@@ -67,7 +67,7 @@ public class DoctorsController(
         return Ok(doctorResources);
     }
 
-    [HttpGet("/organization/{organizationId:int}")]
+    [HttpGet("organization/{organizationId:int}")]
     [SwaggerOperation(
         Summary = "Get All Doctors By Organization Id",
         Description = "Get All Doctors By Organization Id",
@@ -80,7 +80,7 @@ public class DoctorsController(
         return Ok(doctorResources);
     }
 
-    [HttpGet("/user/{userId:int}/organization/{organizationId:int}")]
+    [HttpGet("user/{userId:int}/organization/{organizationId:int}")]
     [SwaggerOperation(
         Summary = "Get Doctor By User Id And Organization Id",
         Description = "Get Doctor By User Id And Organization Id",
@@ -96,7 +96,7 @@ public class DoctorsController(
         return Ok(resource);
     }
 
-    [HttpPut("/{doctorId:int}")]
+    [HttpPut("{doctorId:int}")]
     [SwaggerOperation(
         Summary = "Update A Doctor",
         Description = "Update A Doctor",
@@ -113,7 +113,7 @@ public class DoctorsController(
         return Ok(doctorResource);
     }
 
-    [HttpDelete("/{doctorId:int}")]
+    [HttpDelete("{doctorId:int}")]
     [SwaggerOperation(
         Summary = "Delete A Doctor",
         Description = "Delete A Doctor",
@@ -128,7 +128,7 @@ public class DoctorsController(
             await doctorCommandService.Handle(deleteDoctorCommand);
             return NoContent();
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return NotFound();
         }

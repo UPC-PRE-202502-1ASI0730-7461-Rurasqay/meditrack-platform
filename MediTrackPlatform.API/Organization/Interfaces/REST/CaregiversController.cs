@@ -67,7 +67,7 @@ public class CaregiversController(
         return Ok(caregiverResources);
     }
     
-    [HttpGet("/organization/{organizationId:int}")]
+    [HttpGet("organization/{organizationId:int}")]
     [SwaggerOperation(
         Summary = "Get All Caregivers By Organization Id",
         Description = "Get All Caregivers By Organization Id",
@@ -80,7 +80,7 @@ public class CaregiversController(
         return Ok(caregiverResources);
     }
     
-    [HttpGet("/user/{userId:int}/organization/{organizationId:int}")]
+    [HttpGet("user/{userId:int}/organization/{organizationId:int}")]
     [SwaggerOperation(
         Summary = "Get Caregiver By User Id And Organization Id",
         Description = "Get Caregiver By User Id And Organization Id",
@@ -96,7 +96,7 @@ public class CaregiversController(
         return Ok(resource);
     }
     
-    [HttpPut("/{caregiverId:int}")]
+    [HttpPut("{caregiverId:int}")]
     [SwaggerOperation(
         Summary = "Update A Caregiver",
         Description = "Update A Caregiver",
@@ -113,7 +113,7 @@ public class CaregiversController(
         return Ok(caregiverResource);
     }
 
-    [HttpDelete("/{caregiverId:int}")]
+    [HttpDelete("{caregiverId:int}")]
     [SwaggerOperation(
         Summary = "Delete A Caregiver",
         Description = "Delete A Caregiver",
@@ -128,7 +128,7 @@ public class CaregiversController(
             await caregiverCommandService.Handle(deleteCaregiverCommand);
             return NoContent();
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return NotFound();
         }
