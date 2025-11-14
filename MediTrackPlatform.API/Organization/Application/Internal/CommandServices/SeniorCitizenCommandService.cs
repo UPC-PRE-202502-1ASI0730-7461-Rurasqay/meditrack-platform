@@ -10,10 +10,7 @@ namespace MediTrackPlatform.API.Organization.Application.Internal.CommandService
 
 public class SeniorCitizenCommandService(
     ISeniorCitizenRepository seniorCitizenRepository,
-    IOrganizationRepository organizationRepository,
-    IDoctorAssignmentRepository doctorAssignmentRepository,
     IDoctorRepository doctorRepository,
-    ICaregiverAssignmentRepository caregiverAssignmentRepository,
     ICaregiverRepository caregiverRepository,
     IUnitOfWork unitOfWork,
     IMediator domainEventPublisher
