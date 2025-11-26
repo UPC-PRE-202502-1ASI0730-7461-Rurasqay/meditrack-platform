@@ -5,6 +5,8 @@ using MediTrackPlatform.API.Shared.Infrastructure.Interfaces.ASP.Configuration.E
 using MediTrackPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration.Extensions;
 using MediTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
 using MediTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
+using MediTrackPlatform.API.Organization.Infrastructure.Interfaces.ASP.Configuration;
+using MediTrackPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -181,6 +183,7 @@ else if (builder.Environment.IsProduction())
 // Add context-specific services
 builder.AddSharedContextServices();
 builder.AddDevicesContextServices();
+builder.AddOrganizationContextServices();
 
 // Mediator Configuration
 builder.AddCortexConfigurationServices();
@@ -192,6 +195,16 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
+    
+    // Diagnostic logging: Print EF model entity types and their table names
+    Console.WriteLine("EF Model Entity Types and Table Names:");
+    var entityTypes = context.Model.GetEntityTypes();
+    foreach (var entityType in entityTypes)
+    {
+        var tableName = entityType.GetTableName();
+        Console.WriteLine($"Entity: {entityType.ClrType.Name}, Table: {tableName}");
+    }
+    
     context.Database.EnsureCreated();
 }
 

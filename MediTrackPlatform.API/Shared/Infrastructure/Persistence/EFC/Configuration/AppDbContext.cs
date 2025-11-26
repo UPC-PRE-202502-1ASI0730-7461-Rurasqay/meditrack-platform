@@ -1,6 +1,7 @@
 using MediTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using EntityFrameworkCore.CreatedUpdatedDate.Extensions;
 using MediTrackPlatform.API.Devices.Infrastructure.Persistence.EFC.Configuration.Extensions;
+using MediTrackPlatform.API.Organization.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
@@ -18,6 +19,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     {
         base.OnModelCreating(builder);
         builder.ApplyDevicesConfiguration();
+        builder.ApplyOrganizationsConfiguration();
         builder.UseSnakeCaseNamingConvention();
     }
 }
