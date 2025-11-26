@@ -1,4 +1,7 @@
 using MediTrackPlatform.API.Devices.Infrastructure.Interfaces.ASP.Configuration;
+using MediTrackPlatform.API.Relatives.Application.Internal.QueryServices;
+using MediTrackPlatform.API.Relatives.Domain.Repositories;
+using MediTrackPlatform.API.Relatives.Infrastructure.Persistence.Repositories;
 using MediTrackPlatform.API.Shared.Domain.Repositories;
 using MediTrackPlatform.API.Shared.Infrastructure.Interfaces.ASP.Configuration;
 using MediTrackPlatform.API.Shared.Infrastructure.Interfaces.ASP.Configuration.Extensions;
@@ -187,6 +190,8 @@ builder.AddOrganizationContextServices();
 
 // Mediator Configuration
 builder.AddCortexConfigurationServices();
+builder.Services.AddScoped<IRelativeQueryService, RelativeQueryService>();
+builder.Services.AddScoped<IRelativeRepository, RelativeRepository>();
 
 var app = builder.Build();
 
