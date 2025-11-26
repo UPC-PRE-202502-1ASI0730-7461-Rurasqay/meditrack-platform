@@ -24,7 +24,12 @@ builder.Services.AddControllers(options => options.Conventions.Add(new KebabCase
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options => options.EnableAnnotations());
+builder.Services.AddSwaggerGen(options =>
+{
+    options.EnableAnnotations();
+    // Use full type name for schema IDs to avoid conflicts between types with the same name in different namespaces
+    options.CustomSchemaIds(type => type.FullName?.Replace("+", "."));
+});
 
 // Add Database Connection
 
