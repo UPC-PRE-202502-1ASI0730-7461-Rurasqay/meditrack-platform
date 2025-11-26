@@ -2,7 +2,6 @@ namespace MediTrackPlatform.API.Organization.Interfaces.REST.Resources;
 
 public record CreateSeniorCitizenResource(
     int OrganizationId,
-    int DeviceId,
     string FirstName,
     string LastName,
     string Dni,
