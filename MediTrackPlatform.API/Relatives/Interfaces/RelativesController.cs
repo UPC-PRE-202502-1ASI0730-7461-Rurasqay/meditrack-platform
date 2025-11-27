@@ -1,5 +1,6 @@
 ﻿using System.Net.Mime;
 using MediTrackPlatform.API.Relatives.Domain.Model.Queries;
+using MediTrackPlatform.API.Relatives.Domain.Services;
 using MediTrackPlatform.API.Relatives.Interfaces.REST.Resources;
 using MediTrackPlatform.API.Relatives.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;

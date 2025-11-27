@@ -7,7 +7,6 @@ using MediTrackPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration.
 using MediTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
 using MediTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
 using MediTrackPlatform.API.Organization.Infrastructure.Interfaces.ASP.Configuration;
-using MediTrackPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -8,7 +8,7 @@ namespace MediTrackPlatform.API.Relatives.Infrastructure.Persistence.Repositorie
 
 public class RelativeRepository(AppDbContext context) : BaseRepository<Relative>(context), IRelativeRepository
 {
-    public async Task<Relative> GetByIdAsync(int id)
+    public async Task<Relative?> GetByIdAsync(int id)
     {
         return await Context.Set<Relative?>()
             .Include(r => r.SeniorCitizen) 
