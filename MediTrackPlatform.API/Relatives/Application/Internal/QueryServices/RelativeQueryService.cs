@@ -1,6 +1,7 @@
 ﻿using MediTrackPlatform.API.Relatives.Domain.Model.Aggregates;
 using MediTrackPlatform.API.Relatives.Domain.Model.Queries;
 using MediTrackPlatform.API.Relatives.Domain.Repositories;
+using MediTrackPlatform.API.Relatives.Domain.Services;
 
 namespace MediTrackPlatform.API.Relatives.Application.Internal.QueryServices;
 
