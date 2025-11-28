@@ -7,6 +7,12 @@ public record OxygenThreshold
     // Constructor para EF Core y creación
     public OxygenThreshold(int min)
     {
+        // Handle default values from persistence (e.g. 0)
+        if (min == 0)
+        {
+            Min = 90;
+            return;
+        }
         Min = min;
     }
 

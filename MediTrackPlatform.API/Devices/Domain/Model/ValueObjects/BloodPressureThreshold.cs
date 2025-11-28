@@ -7,6 +7,14 @@ public record BloodPressureThreshold
     
     public BloodPressureThreshold(int min, int max)
     {
+        // Handle default values from persistence (e.g. 0, 0)
+        if (min == 0 && max == 0)
+        {
+            Min = 90;
+            Max = 180;
+            return;
+        }
+
         if (min >= max)
             throw new ArgumentException("El umbral mínimo no puede ser mayor o igual al máximo.");
         
