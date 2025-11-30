@@ -8,6 +8,9 @@ using MediTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
 using MediTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
 using MediTrackPlatform.API.Organization.Infrastructure.Interfaces.ASP.Configuration;
 using Microsoft.EntityFrameworkCore;
+using MediTrackPlatform.API.Shared.Infrastructure.Documentation.OpenApi.Configuration.Extensions;
+using MediTrackPlatform.API.IAM.Infrastructure.Pipeline.Middleware.Extensions;
+using MediTrackPlatform.API.IAM.Infrastructure.Interfaces.ASP.Configuration.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -184,12 +187,14 @@ else if (builder.Environment.IsProduction())
     });
 
 // Add Open API Configuration
+builder.AddOpenApiDocumentation();
 
 // Add context-specific services
 builder.AddSharedContextServices();
 builder.AddDevicesContextServices();
 builder.AddOrganizationContextServices();
 builder.AddRelativesContextServices();
+builder.AddIamContextServices();
 
 // Mediator Configuration
 builder.AddCortexConfigurationServices();
@@ -220,6 +225,12 @@ using (var scope = app.Services.CreateScope())
     app.UseSwagger();
     app.UseSwaggerUI();
 //}
+
+// Apply CORS Policy
+app.UseCors("AllowAllPolicy");
+
+// Add Authorization Middleware to Pipeline
+app.UseRequestAuthorization();
 
 app.UseHttpsRedirection();
 
