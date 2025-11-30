@@ -9,7 +9,6 @@ public static class CreateSeniorCitizenCommandFromResourceAssembler
     {
         return new CreateSeniorCitizenCommand(
             resource.OrganizationId,
-            resource.DeviceId,
             resource.FirstName,
             resource.LastName,
             resource.Dni,

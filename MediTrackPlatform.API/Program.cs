@@ -1,7 +1,5 @@
 using MediTrackPlatform.API.Devices.Infrastructure.Interfaces.ASP.Configuration;
-using MediTrackPlatform.API.Relatives.Application.Internal.QueryServices;
-using MediTrackPlatform.API.Relatives.Domain.Repositories;
-using MediTrackPlatform.API.Relatives.Infrastructure.Persistence.Repositories;
+using MediTrackPlatform.API.Relatives.Infrastructure.Interfaces.ASP.Configuration;
 using MediTrackPlatform.API.Shared.Domain.Repositories;
 using MediTrackPlatform.API.Shared.Infrastructure.Interfaces.ASP.Configuration;
 using MediTrackPlatform.API.Shared.Infrastructure.Interfaces.ASP.Configuration.Extensions;
@@ -9,8 +7,10 @@ using MediTrackPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration.
 using MediTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Configuration;
 using MediTrackPlatform.API.Shared.Infrastructure.Persistence.EFC.Repositories;
 using MediTrackPlatform.API.Organization.Infrastructure.Interfaces.ASP.Configuration;
-using MediTrackPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration.Extensions;
 using Microsoft.EntityFrameworkCore;
+using MediTrackPlatform.API.Shared.Infrastructure.Documentation.OpenApi.Configuration.Extensions;
+using MediTrackPlatform.API.IAM.Infrastructure.Pipeline.Middleware.Extensions;
+using MediTrackPlatform.API.IAM.Infrastructure.Interfaces.ASP.Configuration.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +24,12 @@ builder.Services.AddControllers(options => options.Conventions.Add(new KebabCase
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options => options.EnableAnnotations());
+builder.Services.AddSwaggerGen(options =>
+{
+    options.EnableAnnotations();
+    // Use full type name for schema IDs to avoid conflicts between types with the same name in different namespaces
+    options.CustomSchemaIds(type => type.FullName?.Replace("+", "."));
+});
 
 // Add Database Connection
 
@@ -182,16 +187,17 @@ else if (builder.Environment.IsProduction())
     });
 
 // Add Open API Configuration
+builder.AddOpenApiDocumentation();
 
 // Add context-specific services
 builder.AddSharedContextServices();
 builder.AddDevicesContextServices();
 builder.AddOrganizationContextServices();
+builder.AddRelativesContextServices();
+builder.AddIamContextServices();
 
 // Mediator Configuration
 builder.AddCortexConfigurationServices();
-builder.Services.AddScoped<IRelativeQueryService, RelativeQueryService>();
-builder.Services.AddScoped<IRelativeRepository, RelativeRepository>();
 
 var app = builder.Build();
 
@@ -219,6 +225,12 @@ using (var scope = app.Services.CreateScope())
     app.UseSwagger();
     app.UseSwaggerUI();
 //}
+
+// Apply CORS Policy
+app.UseCors("AllowAllPolicy");
+
+// Add Authorization Middleware to Pipeline
+app.UseRequestAuthorization();
 
 app.UseHttpsRedirection();
 

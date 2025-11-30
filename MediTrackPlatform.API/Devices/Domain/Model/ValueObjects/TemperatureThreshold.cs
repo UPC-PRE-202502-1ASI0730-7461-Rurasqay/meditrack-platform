@@ -8,6 +8,13 @@ public record TemperatureThreshold
     // Constructor para EF Core y creación
     public TemperatureThreshold(double min, double max)
     {
+        // Handle default values from persistence (e.g. 0, 0)
+        if (min == 0 && max == 0)
+        {
+            Min = 35.0;
+            Max = 38.0;
+            return;
+        }
         if (min >= max)
             throw new ArgumentException("El umbral mínimo no puede ser mayor o igual al máximo.");
         

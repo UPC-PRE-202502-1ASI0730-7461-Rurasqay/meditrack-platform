@@ -39,7 +39,7 @@ public partial class SeniorCitizen
     public SeniorCitizen(CreateSeniorCitizenCommand command)
     {
         OrganizationId = command.OrganizationId;
-        DeviceId = command.DeviceId;
+        DeviceId = -1; // Will be set automatically after device creation via event handler
         FirstName = command.FirstName;
         LastName = command.LastName;
         Dni = command.Dni;

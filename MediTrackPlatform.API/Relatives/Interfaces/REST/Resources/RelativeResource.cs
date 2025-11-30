@@ -2,10 +2,9 @@
 
 public record RelativeResource(
     int Id,
-    string Plan,
+    string PlanType,
     string FirstName,
     string LastName,
     string PhoneNumber,
-    string ProfileImage,
     SeniorCitizenResource SeniorCitizen
 );

@@ -1,14 +1,14 @@
 ﻿namespace MediTrackPlatform.API.Relatives.Interfaces.REST.Resources;
 
 public record SeniorCitizenResource(
-    int SeniorCitizenId,
+    int Id,
     string FirstName,
     string LastName,
     string Dni,
     string Gender,
-    float Height,
-    float Weight,
-    DateTime BirthDate,
+    double Height,
+    string BirthDate,
+    double Weight,
     string ProfileImage,
-    string DeviceId
+    int DeviceId
 );
