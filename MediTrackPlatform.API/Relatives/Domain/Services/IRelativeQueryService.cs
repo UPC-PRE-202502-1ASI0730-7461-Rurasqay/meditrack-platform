@@ -7,4 +7,5 @@ namespace MediTrackPlatform.API.Relatives.Domain.Services;
 public interface IRelativeQueryService
 {
     Task<Relative?> Handle(GetRelativesByIdQuery query);
+    Task<Relative?> Handle(GetRelativeByUserIdQuery query);
 }

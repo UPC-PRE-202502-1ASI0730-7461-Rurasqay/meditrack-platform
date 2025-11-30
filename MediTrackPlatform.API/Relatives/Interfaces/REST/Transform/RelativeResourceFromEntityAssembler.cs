@@ -8,14 +8,14 @@ public class RelativeResourceFromEntityAssembler
     public static RelativeResource ToResourceFromEntity(Relative entity)
     {
         var seniorCitizenResource = new SeniorCitizenResource(
-            entity.SeniorCitizen.SeniorCitizenId,
+            entity.SeniorCitizen.Id,
             entity.SeniorCitizen.FirstName,
             entity.SeniorCitizen.LastName,
             entity.SeniorCitizen.Dni,
             entity.SeniorCitizen.Gender,
             entity.SeniorCitizen.Height,
-            entity.SeniorCitizen.Weight,
             entity.SeniorCitizen.BirthDate,
+            entity.SeniorCitizen.Weight,
             entity.SeniorCitizen.ProfileImage,
             entity.SeniorCitizen.DeviceId
         );
@@ -28,7 +28,6 @@ public class RelativeResourceFromEntityAssembler
             entity.FirstName,
             entity.LastName,
             entity.PhoneNumber,
-            entity.ProfileImage,
             seniorCitizenResource
         );
     }

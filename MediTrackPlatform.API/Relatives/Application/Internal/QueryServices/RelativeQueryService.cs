@@ -13,4 +13,9 @@ public class RelativeQueryService( IRelativeRepository  relativeRepository) : IR
     {
         return relativeRepository.GetByIdAsync(query.id);
     }
+
+    public Task<Relative?> Handle(GetRelativeByUserIdQuery query)
+    {
+        return relativeRepository.FindByUserIdAsync(query.UserId);
+    }
 }

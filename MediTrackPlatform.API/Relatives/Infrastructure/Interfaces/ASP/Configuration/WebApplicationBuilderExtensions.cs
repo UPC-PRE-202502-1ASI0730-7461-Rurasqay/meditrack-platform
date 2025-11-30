@@ -1,3 +1,4 @@
+using MediTrackPlatform.API.Relatives.Application.Internal.CommandServices;
 using MediTrackPlatform.API.Relatives.Application.Internal.QueryServices;
 using MediTrackPlatform.API.Relatives.Domain.Repositories;
 using MediTrackPlatform.API.Relatives.Domain.Services;
@@ -11,5 +12,6 @@ public static class WebApplicationBuilderExtensions
     {
         builder.Services.AddScoped<IRelativeRepository, RelativeRepository>();
         builder.Services.AddScoped<IRelativeQueryService, RelativeQueryService>();
+        builder.Services.AddScoped<IRelativeCommandService, RelativeCommandService>();
     }
 }

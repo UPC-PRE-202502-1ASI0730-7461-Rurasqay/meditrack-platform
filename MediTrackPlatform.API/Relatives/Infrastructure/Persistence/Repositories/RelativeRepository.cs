@@ -10,8 +10,15 @@ public class RelativeRepository(AppDbContext context) : BaseRepository<Relative>
 {
     public async Task<Relative?> GetByIdAsync(int id)
     {
-        return await Context.Set<Relative?>()
+        return await Context.Set<Relative>()
             .Include(r => r.SeniorCitizen) 
             .FirstOrDefaultAsync(r => r.Id == id);
+    }
+
+    public async Task<Relative?> FindByUserIdAsync(int userId)
+    {
+        return await Context.Set<Relative>()
+            .Include(r => r.SeniorCitizen)
+            .FirstOrDefaultAsync(r => r.UserId == userId);
     }
 }
