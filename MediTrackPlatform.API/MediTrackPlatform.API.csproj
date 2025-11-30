@@ -38,6 +38,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="IAM\Infrastructure\Interfaces\ASP\Configuration\Extensions\" />
       <Folder Include="Organization\Application\" />
     </ItemGroup>
 
