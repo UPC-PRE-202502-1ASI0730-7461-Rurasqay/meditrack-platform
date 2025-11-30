@@ -37,11 +37,19 @@ public class AuthenticationController(IUserCommandService userCommandService) : 
         Summary = "Sign-up",
         Description = "Sign up a new user",
         OperationId = "SignUp")]
-    [SwaggerResponse(StatusCodes.Status200OK, "The user was created successfully")]
+    [SwaggerResponse(StatusCodes.Status201Created, "The user was created successfully", typeof(AuthenticatedUserResource))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Bad request")]
     public async Task<IActionResult> SignUp([FromBody] SignUpResource signUpResource)
     {
         var signUpCommand = SignUpCommandFromResourceAssembler.ToCommandFromResource(signUpResource);
-        await userCommandService.Handle(signUpCommand);
-        return Ok(new { message = "User created successfully" });
+        var user = await userCommandService.Handle(signUpCommand);
+        
+        if (user is null) return BadRequest();
+
+        var signInCommand = new Domain.Model.Commands.SignInCommand(signUpResource.Email, signUpResource.Password);
+        var authenticatedUser = await userCommandService.Handle(signInCommand);
+        
+        var resource = AuthenticatedUserResourceFromEntityAssembler.ToResourceFromEntity(authenticatedUser.user, authenticatedUser.token);
+        return CreatedAtAction(nameof(SignIn), resource);
     }
 }

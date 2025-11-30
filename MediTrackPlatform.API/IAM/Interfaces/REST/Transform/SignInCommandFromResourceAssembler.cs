@@ -6,5 +6,5 @@ namespace MediTrackPlatform.API.IAM.Interfaces.REST.Transform;
 public static class SignInCommandFromResourceAssembler
 {
     public static SignInCommand ToCommandFromResource(SignInResource resource)
-        => new SignInCommand(resource.Username, resource.Password);
+        => new SignInCommand(resource.Email, resource.Password);
 }

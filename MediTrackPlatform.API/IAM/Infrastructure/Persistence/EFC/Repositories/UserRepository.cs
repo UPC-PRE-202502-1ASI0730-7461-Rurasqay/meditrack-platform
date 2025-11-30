@@ -8,9 +8,9 @@ namespace MediTrackPlatform.API.IAM.Infrastructure.Persistence.EFC.Repositories;
 
 public class UserRepository(AppDbContext context) : BaseRepository<User>(context), IUserRepository
 {
-    public async Task<User?> FindByUsernameAsync(string username)
-        => await Context.Set<User>().FirstOrDefaultAsync(user => user.Username.Equals(username));
+    public async Task<User?> FindByEmailAsync(string email)
+        => await Context.Set<User>().FirstOrDefaultAsync(user => user.Email.Equals(email));
     
-    public bool ExistsByUsername(string username)
-        => Context.Set<User>().Any(user => user.Username.Equals(username));
+    public bool ExistsByEmail(string email)
+        => Context.Set<User>().Any(user => user.Email.Equals(email));
 }

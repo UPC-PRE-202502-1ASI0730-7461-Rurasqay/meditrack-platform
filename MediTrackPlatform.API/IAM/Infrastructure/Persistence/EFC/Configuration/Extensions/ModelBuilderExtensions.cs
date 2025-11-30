@@ -10,7 +10,9 @@ public static class ModelBuilderExtensions
         // IAM Context
         builder.Entity<User>().HasKey(u => u.Id);
         builder.Entity<User>().Property(u => u.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<User>().Property(u => u.Username).IsRequired();
-        builder.Entity<User>().Property(u => u.PasswordHash).IsRequired();
+        builder.Entity<User>().Property(u => u.Email).IsRequired().HasMaxLength(100);
+        builder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+        builder.Entity<User>().Property(u => u.PasswordHash).IsRequired().HasMaxLength(120);
+        builder.Entity<User>().Property(u => u.Role).HasMaxLength(50);
     }
 }
