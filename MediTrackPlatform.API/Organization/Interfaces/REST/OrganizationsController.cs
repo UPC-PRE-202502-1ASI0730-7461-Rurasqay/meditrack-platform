@@ -67,7 +67,7 @@ public class OrganizationsController(
         return Ok(organizationResources);
     }
     
-    [HttpPut("/{organizationId:int}")]
+    [HttpPut("{organizationId:int}")]
     [SwaggerOperation(
         Summary = "Update An Organization",
         Description = "Update An Organization",
@@ -84,7 +84,7 @@ public class OrganizationsController(
         return Ok(organizationResource);
     }
 
-    [HttpDelete("/{organizationId:int}")]
+    [HttpDelete("{organizationId:int}")]
     [SwaggerOperation(
         Summary = "Delete An Organization",
         Description = "Delete An Organization",

@@ -18,7 +18,7 @@ public class CaregiversController(
     ICaregiverQueryService caregiverQueryService
     ) : ControllerBase
 {
-    [HttpGet("/{caregiverId:int}")]
+    [HttpGet("{caregiverId:int}")]
     [SwaggerOperation(
         Summary = "Get Caregiver By Id",
         Description = "Get Caregiver By Id",

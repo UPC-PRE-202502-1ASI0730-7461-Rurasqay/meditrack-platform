@@ -41,7 +41,7 @@ public class DoctorAssignmentsController(
         }
     }
 
-    [HttpDelete("/doctors/{doctorId:int}/senior-citizens/{seniorCitizenId:int}")]
+    [HttpDelete("doctors/{doctorId:int}/senior-citizens/{seniorCitizenId:int}")]
     [SwaggerOperation(
         Summary = "Unassign a senior citizen from a doctor",
         Description = "Unassign a senior citizen from a doctor",

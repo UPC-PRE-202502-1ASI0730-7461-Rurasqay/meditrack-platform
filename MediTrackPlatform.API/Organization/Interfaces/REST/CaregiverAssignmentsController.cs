@@ -41,7 +41,7 @@ public class CaregiverAssignmentsController(
         }
     }
 
-    [HttpDelete("/caregivers/{caregiverId:int}/senior-citizens/{seniorCitizenId:int}")]
+    [HttpDelete("caregivers/{caregiverId:int}/senior-citizens/{seniorCitizenId:int}")]
     [SwaggerOperation(
         Summary = "Unassign a senior citizen from a caregiver",
         Description = "Unassign a senior citizen from a caregiver",
