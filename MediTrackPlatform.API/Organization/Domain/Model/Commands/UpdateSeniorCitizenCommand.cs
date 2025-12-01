@@ -4,8 +4,6 @@ public record UpdateSeniorCitizenCommand(
     int SeniorCitizenId,
     int OrganizationId,
     int DeviceId,
-    int AssignedDoctorId,
-    int AssignedCaregiverId,
     string FirstName,
     string LastName,
     string Dni,

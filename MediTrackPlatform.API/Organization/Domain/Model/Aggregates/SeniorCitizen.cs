@@ -69,8 +69,6 @@ public partial class SeniorCitizen
     {
         OrganizationId = command.OrganizationId;
         DeviceId = command.DeviceId;
-        AssignedDoctorId = command.AssignedDoctorId;
-        AssignedCaregiverId = command.AssignedCaregiverId;
         FirstName = command.FirstName;
         LastName = command.LastName;
         Dni = command.Dni;
@@ -79,7 +77,7 @@ public partial class SeniorCitizen
         Weight = command.Weight;
         Height = command.Height;
         ImageUrl = command.ImageUrl;
-        PlanType = command.PlanType ?? "freemium";
+        PlanType = command.PlanType;
         return this;
     }
     

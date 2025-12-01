@@ -11,8 +11,6 @@ public static class UpdateSeniorCitizenCommandFromResourceAssembler
             seniorCitizenId,
             resource.OrganizationId,
             resource.DeviceId,
-            resource.AssignedDoctorId,
-            resource.AssignedCaregiverId,
             resource.FirstName,
             resource.LastName,
             resource.Dni,
@@ -22,6 +20,6 @@ public static class UpdateSeniorCitizenCommandFromResourceAssembler
             resource.Height,
             resource.ImageUrl,
             resource.PlanType
-            );
+        );
     }
 }
