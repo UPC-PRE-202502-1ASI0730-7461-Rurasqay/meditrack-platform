@@ -21,6 +21,7 @@ public static class SeniorCitizenResourceFromEntityAssembler
             entity.Weight,
             entity.Height,
             entity.ImageUrl,
+            entity.PlanType,
             entity.CreatedDate?.DateTime,
             entity.UpdatedDate?.DateTime
             );

@@ -14,6 +14,7 @@ public record SeniorCitizenResource(
     double Weight,
     double Height,
     string ImageUrl,
+    string PlanType,
     DateTime? CreatedAt,
     DateTime? UpdatedAt
     );

@@ -52,6 +52,7 @@ public static class ModelBuilderExtensions
         // Senior Citizen
         builder.Entity<SeniorCitizen>().HasKey(s => s.Id);
         builder.Entity<SeniorCitizen>().Property(s => s.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<SeniorCitizen>().Property(s => s.OrganizationId);
         builder.Entity<SeniorCitizen>().Property(s => s.DeviceId);
         builder.Entity<SeniorCitizen>().Property(s => s.AssignedDoctorId);
         builder.Entity<SeniorCitizen>().Property(s => s.AssignedCaregiverId);
@@ -64,6 +65,7 @@ public static class ModelBuilderExtensions
         builder.Entity<SeniorCitizen>().Property(s => s.Weight).IsRequired();
         builder.Entity<SeniorCitizen>().Property(s => s.Height).IsRequired();
         builder.Entity<SeniorCitizen>().Property(s => s.ImageUrl).HasMaxLength(300);
+        builder.Entity<SeniorCitizen>().Property(s => s.PlanType).HasMaxLength(50).HasDefaultValue("freemium");
         builder.Entity<SeniorCitizen>().ToTable(typeof(SeniorCitizen).Name.ToPlural().ToSnakeCase());
     }
 }

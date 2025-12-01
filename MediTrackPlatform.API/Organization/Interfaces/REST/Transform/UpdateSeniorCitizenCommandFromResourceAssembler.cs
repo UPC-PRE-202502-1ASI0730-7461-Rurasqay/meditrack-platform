@@ -9,7 +9,10 @@ public static class UpdateSeniorCitizenCommandFromResourceAssembler
     {
         return new UpdateSeniorCitizenCommand(
             seniorCitizenId,
+            resource.OrganizationId,
             resource.DeviceId,
+            resource.AssignedDoctorId,
+            resource.AssignedCaregiverId,
             resource.FirstName,
             resource.LastName,
             resource.Dni,
@@ -17,7 +20,8 @@ public static class UpdateSeniorCitizenCommandFromResourceAssembler
             resource.Gender,
             resource.Weight,
             resource.Height,
-            resource.ImageUrl
+            resource.ImageUrl,
+            resource.PlanType
             );
     }
 }

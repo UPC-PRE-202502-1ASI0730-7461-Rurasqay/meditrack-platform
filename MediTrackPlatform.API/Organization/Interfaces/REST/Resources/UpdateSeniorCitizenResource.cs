@@ -1,7 +1,10 @@
 namespace MediTrackPlatform.API.Organization.Interfaces.REST.Resources;
 
 public record UpdateSeniorCitizenResource(
+    int OrganizationId,
     int DeviceId,
+    int AssignedDoctorId,
+    int AssignedCaregiverId,
     string FirstName,
     string LastName,
     string Dni,
@@ -9,5 +12,6 @@ public record UpdateSeniorCitizenResource(
     string Gender,
     double Weight,
     double Height,
-    string ImageUrl
+    string ImageUrl,
+    string PlanType
     );

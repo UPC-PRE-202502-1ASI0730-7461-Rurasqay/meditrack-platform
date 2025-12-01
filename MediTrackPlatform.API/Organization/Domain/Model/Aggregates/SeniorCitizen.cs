@@ -18,6 +18,7 @@ public partial class SeniorCitizen
     public double Weight { get; private set; }
     public double Height { get; private set; }
     public string ImageUrl { get; private set; }
+    public string PlanType { get; private set; }
 
     public SeniorCitizen()
     {
@@ -34,12 +35,15 @@ public partial class SeniorCitizen
         Weight = 0;
         Height = 0;
         ImageUrl = string.Empty;
+        PlanType = "freemium";
     }
 
     public SeniorCitizen(CreateSeniorCitizenCommand command)
     {
         OrganizationId = command.OrganizationId;
         DeviceId = -1; // Will be set automatically after device creation via event handler
+        AssignedDoctorId = -1; // No assignment initially
+        AssignedCaregiverId = -1; // No assignment initially
         FirstName = command.FirstName;
         LastName = command.LastName;
         Dni = command.Dni;
@@ -48,6 +52,7 @@ public partial class SeniorCitizen
         Weight = command.Weight;
         Height = command.Height;
         ImageUrl = command.ImageUrl;
+        PlanType = "freemium"; // Default plan type
     }
 
     public string GetFullName() => $"{FirstName} {LastName}";
@@ -62,7 +67,10 @@ public partial class SeniorCitizen
 
     public SeniorCitizen UpdatePersonalInformation(UpdateSeniorCitizenCommand command)
     {
+        OrganizationId = command.OrganizationId;
         DeviceId = command.DeviceId;
+        AssignedDoctorId = command.AssignedDoctorId;
+        AssignedCaregiverId = command.AssignedCaregiverId;
         FirstName = command.FirstName;
         LastName = command.LastName;
         Dni = command.Dni;
@@ -71,6 +79,7 @@ public partial class SeniorCitizen
         Weight = command.Weight;
         Height = command.Height;
         ImageUrl = command.ImageUrl;
+        PlanType = command.PlanType ?? "freemium";
         return this;
     }
     
