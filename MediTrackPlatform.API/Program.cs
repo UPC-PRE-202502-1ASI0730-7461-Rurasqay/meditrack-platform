@@ -195,6 +195,7 @@ builder.AddDevicesContextServices();
 builder.AddOrganizationContextServices();
 builder.AddRelativesContextServices();
 builder.AddIamContextServices();
+builder.AddCorsPolicy();
 
 // Mediator Configuration
 builder.AddCortexConfigurationServices();
