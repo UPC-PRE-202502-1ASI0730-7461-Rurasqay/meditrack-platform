@@ -35,13 +35,23 @@ public partial class Alert
     
     public string SetMessage(string measurementType)
     {
-        return measurementType switch
+        return measurementType.ToUpper() switch
         {
-            "Temperature" => $"High temperature recorded: {DataRegistered}°C",
-            "HeartRate" => $"Abnormal heart rate recorded: {DataRegistered} bpm",
-            "Oxygen" => $"Low oxygen saturation recorded: {DataRegistered}%",
-            "BloodPressure" => $"Abnormal blood pressure recorded: {DataRegistered} mmHg",
-            _ => "Unknown measurement type"
+            "TEMPERATURE" => DataRegistered > 38 
+                ? $"Temperatura excedida: {DataRegistered:F1}°C (Normal: 35-38°C)" 
+                : $"Temperatura debajo de valores normales: {DataRegistered:F1}°C (Normal: 35-38°C)",
+            
+            "HEART_RATE" or "HEARTRATE" => DataRegistered > 120 
+                ? $"Frecuencia cardíaca elevada: {DataRegistered:F0} lpm (Normal: 50-120 lpm)" 
+                : $"Frecuencia cardíaca baja: {DataRegistered:F0} lpm (Normal: 50-120 lpm)",
+            
+            "OXYGEN" => $"Saturación de oxígeno baja: {DataRegistered:F0}% (Normal: >90%)",
+            
+            "BLOOD_PRESSURE" or "BLOODPRESSURE" => DataRegistered > 180 
+                ? $"Presión arterial elevada: {DataRegistered:F0} mmHg (Normal: 90-180 mmHg)" 
+                : $"Presión arterial baja: {DataRegistered:F0} mmHg (Normal: 90-180 mmHg)",
+            
+            _ => $"Medición anormal detectada: {DataRegistered}"
         };
     }
 }
